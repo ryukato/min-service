@@ -1,0 +1,14 @@
+logging:
+    level:
+        root: INFO
+        org.springframework: INFO
+        org.axonframework: INFO
+        app: INFO
+eureka:
+  instance:
+    metadata-map:
+      instanceId: ${spring.applicaiton.name}:${spring.application.instance_id:${random.value}}
+#    leaseRenewalIntervalInSeconds: 1 # better stick with the default in production.
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

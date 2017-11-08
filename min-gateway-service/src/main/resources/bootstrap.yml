@@ -1,0 +1,31 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: min-gateway-service
+
+server:
+  port: ${PORT:8080}
+zuul:
+  prefix: /api
+#  routes:
+#    product-command:
+#      path: /product-command/**
+#      serviceId: command-service
+#    product-query:
+#      path: /product-query/**
+#      serviceId: query-service
+#    account-command:
+#      path: /account-command/**
+#      serviceId: command-service
+#    account-query:
+#      path: /account-query/**
+#      serviceId: query-service
+
+security:
+  basic:
+    enabled: true
+  user:
+    name: min_admin
+    password: min_admin1!
+    role: SUPER_ADMIN

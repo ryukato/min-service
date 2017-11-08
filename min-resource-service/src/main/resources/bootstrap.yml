@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: min-resource-service
+    index: 1
+  profiles:
+    active: default,dev,mongo
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER_URI:http://localhost:8888}
+      label: master
+      username: min_admin
+      password: min_admin1!
+      fail-fast: false
+  data:
+    rest:
+      default-page-size: 100
+      max-page-size: 100
+      page-param-name: "page"
+      limit-param-name: "limit"
+      sort-param-name: "sort"
+      return-body-on-create: true
+      return-body-on-update: true
+  jackson:
+    serialization:
+      write_dates_as_timestamps: false
+
+server:
+  port: ${PORT:9010}
+  compression:
+    enabled: true
+    mime-types: application/json
+    min-response-size: 1024
+  error:
+    path: "/error"
+  whitelabel:
+    enable: false
+  include-stacktrace: "never"
+
+security:
+  basic:
+    enabled: true
+  oauth2:
+    resource:
+      filter-order: 3
+  sessions: stateless
+  user:
+    name: min_admin
+    password: min_admin1!
+    role: SYS_ADMIN
+
+management:
+  context-path: /actuator
+  security:
+    enabled: true
+    roles: SYS_ADMIN
+    sessions: stateless
