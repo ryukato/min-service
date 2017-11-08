@@ -68,6 +68,11 @@ public class TransferService implements Serializable {
         return receiveMethods;
     }
 
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @Override
     public String toString() {
         return "TransferService{" +
