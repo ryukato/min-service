@@ -1,7 +1,10 @@
 package app.module.tservice.aggregate;
 
+import app.module.tservice.command.AbstractTransferServiceAttrCommand;
 import app.module.tservice.command.CreateTransferServiceCommand;
+import app.module.tservice.command.UpdateTransferServiceCommand;
 import app.module.tservice.event.TransferServiceCreatedEvent;
+import app.module.tservice.event.TransferServiceUpdatedEvent;
 import app.tservice.model.TransferService;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.commandhandling.model.AggregateIdentifier;
@@ -34,7 +37,19 @@ public class TransferServiceAggregate implements Serializable {
         this.transferService = event.getTransferService();
     }
 
-    private void validateRequiredAttr(CreateTransferServiceCommand command) {
+    @CommandHandler
+    public void handle(UpdateTransferServiceCommand command) {
+        validateRequiredAttr(command);
+        AggregateLifecycle.apply(new TransferServiceUpdatedEvent(command.getId(), command.getTransferService()));
+    }
+
+    @EventSourcingHandler
+    protected void on(TransferServiceUpdatedEvent event) {
+        this.id = event.getId();
+        this.transferService = event.getTransferService();
+    }
+
+    private void validateRequiredAttr(AbstractTransferServiceAttrCommand command) {
         Assert.hasLength(command.getId(), "Missing id");
         Assert.hasLength(command.getTransferService().getName(), "Missing Transfer service name");
     }

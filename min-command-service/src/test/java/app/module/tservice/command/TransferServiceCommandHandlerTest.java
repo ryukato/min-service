@@ -2,6 +2,7 @@ package app.module.tservice.command;
 
 import app.module.tservice.aggregate.TransferServiceAggregate;
 import app.module.tservice.event.TransferServiceCreatedEvent;
+import app.module.tservice.event.TransferServiceUpdatedEvent;
 import app.tservice.model.TransferService;
 import org.axonframework.messaging.interceptors.BeanValidationInterceptor;
 import org.axonframework.test.aggregate.AggregateTestFixture;
@@ -11,7 +12,7 @@ import org.junit.Test;
 
 import java.util.UUID;
 
-public class TransferServiceCommandHandler {
+public class TransferServiceCommandHandlerTest {
     private FixtureConfiguration<TransferServiceAggregate> fixture;
 
     @Before
@@ -27,6 +28,17 @@ public class TransferServiceCommandHandler {
         fixture.givenNoPriorActivity()
                 .when(CreateTransferServiceCommand.newCommand(id, transferService))
                 .expectEvents(new TransferServiceCreatedEvent(id, transferService));
+    }
+
+    @Test
+    public void testUpdateTransferService() throws Exception {
+        String id = UUID.randomUUID().toString();
+        TransferService transferService = TransferService.builder().withName("test transfer-service").build();
+        TransferService updateTransferService = TransferService.builder().withName("new transfer-service").build();
+
+        fixture.given(new TransferServiceCreatedEvent(id, transferService))
+                .when(UpdateTransferServiceCommand.newCommand(id, updateTransferService))
+                .expectEvents(new TransferServiceUpdatedEvent(id, updateTransferService));
     }
 
 }
