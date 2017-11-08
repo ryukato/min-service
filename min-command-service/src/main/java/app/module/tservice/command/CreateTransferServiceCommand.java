@@ -1,4 +1,13 @@
 package app.module.tservice.command;
 
-public class CreateTransferServiceCommand {
+import app.tservice.model.TransferService;
+
+public class CreateTransferServiceCommand extends AbstractTransferServiceAttrCommand {
+    public CreateTransferServiceCommand(String id, TransferService transferService) {
+        super(id, transferService);
+    }
+
+    public static Object newCommand(String id, TransferService transferService) {
+        return new CreateTransferServiceCommand(id, transferService);
+    }
 }
