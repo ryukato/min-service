@@ -15,6 +15,10 @@
         <module>min-discovery-service</module>
         <module>min-gateway-service</module>
         <module>min-command-service</module>
+        <module>min-user-domain</module>
+        <module>min-user-command-service</module>
+        <module>min-user-resource-service</module>
+        <module>min-auth-service</module>
     </modules>
 
     <parent>
