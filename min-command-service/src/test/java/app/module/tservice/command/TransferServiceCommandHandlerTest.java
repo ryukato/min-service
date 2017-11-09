@@ -2,6 +2,7 @@ package app.module.tservice.command;
 
 import app.module.tservice.aggregate.TransferServiceAggregate;
 import app.module.tservice.event.TransferServiceCreatedEvent;
+import app.module.tservice.event.TransferServiceRemovedEvent;
 import app.module.tservice.event.TransferServiceUpdatedEvent;
 import app.tservice.model.TransferService;
 import org.axonframework.messaging.interceptors.BeanValidationInterceptor;
@@ -39,6 +40,16 @@ public class TransferServiceCommandHandlerTest {
         fixture.given(new TransferServiceCreatedEvent(id, transferService))
                 .when(UpdateTransferServiceCommand.newCommand(id, updateTransferService))
                 .expectEvents(new TransferServiceUpdatedEvent(id, updateTransferService));
+    }
+
+    @Test
+    public void testDeleteTransferService() throws Exception {
+        String id = UUID.randomUUID().toString();
+        TransferService transferService = TransferService.builder().withName("test transfer-service").build();
+
+        fixture.given(new TransferServiceCreatedEvent(id, transferService))
+                .when(DeleteTransferServiceCommand.newCommand(id))
+                .expectEvents(new TransferServiceRemovedEvent(id));
     }
 
 }
