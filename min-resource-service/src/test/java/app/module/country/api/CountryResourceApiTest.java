@@ -1,8 +1,6 @@
-package app.api;
+package app.module.country.api;
 
 import app.MinResourceServiceApplication;
-import app.module.country.api.CountryResourceApiImpl;
-import app.module.country.api.CountryResourceApi;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

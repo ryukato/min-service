@@ -1,5 +1,7 @@
 package app.module.currency.entity;
 
+import app.currency.event.CurrencyCreatedEvent;
+import app.currency.event.CurrencyUpdatedEvent;
 import app.entity.AuditEntity;
 import app.currency.model.Currency;
 import org.springframework.data.annotation.Id;
@@ -21,6 +23,11 @@ public class CurrencyEntity extends AuditEntity implements Identifiable, Seriali
     private boolean isActive;
 
     public CurrencyEntity(Currency currency) {
+        this.currency = currency;
+    }
+
+    public CurrencyEntity(String id, Currency currency) {
+        this.id = id;
         this.currency = currency;
     }
 
@@ -134,5 +141,13 @@ public class CurrencyEntity extends AuditEntity implements Identifiable, Seriali
                 "currency=" + currency + super.toString()+
                 ", isActive=" + isActive +
                 '}';
+    }
+
+    public static CurrencyEntity from(CurrencyCreatedEvent event) {
+        return new CurrencyEntity(event.getId(), event.getCurrency());
+    }
+
+    public static CurrencyEntity from(CurrencyUpdatedEvent event) {
+        return new CurrencyEntity(event.getId(), event.getCurrency());
     }
 }

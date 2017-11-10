@@ -1,8 +1,6 @@
-package app.api;
+package app.module.currency.api;
 
 import app.MinResourceServiceApplication;
-import app.module.currency.api.CurrencyResourceApiImpl;
-import app.module.currency.api.CurrencyResourceApi;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,6 +44,44 @@ public class CurrencyResourceApiTest {
     public void testFindAllCurrencies() throws Exception {
         String content = this.mockMvc.perform(get("/api/v1/currencies")
                 .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+
+        assertContentNotEmpty(content);
+    }
+
+    @Test
+    public void testFindById() throws Exception {
+        String testId = "59aea4483d4a9e4199780dc3";
+        String content = this.mockMvc.perform(get("/api/v1/currencies/" + testId)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+
+        assertContentNotEmpty(content);
+    }
+
+    @Test
+    public void testFindByName() throws Exception {
+        String testName = "Korea";
+        String content = this.mockMvc.perform(get("/api/v1/currencies/search/by-name")
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .param("name", testName))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn().getResponse().getContentAsString();
+
+        assertContentNotEmpty(content);
+    }
+
+    @Test
+    public void testFindByKoreanName() throws Exception {
+        String testName = "Korea";
+        String content = this.mockMvc.perform(get("/api/v1/currencies/search/by-korean-name")
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .param("name", testName))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andReturn().getResponse().getContentAsString();

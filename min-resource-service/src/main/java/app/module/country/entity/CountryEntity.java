@@ -1,5 +1,7 @@
 package app.module.country.entity;
 
+import app.country.event.CountryCreatedEvent;
+import app.country.event.CountryUpdatedEvent;
 import app.entity.AuditEntity;
 import app.country.model.Country;
 import org.springframework.data.annotation.Id;
@@ -21,6 +23,11 @@ public class CountryEntity extends AuditEntity implements Identifiable, Serializ
     private boolean isActive;
 
     public CountryEntity(Country country) {
+        this.country = country;
+    }
+
+    public CountryEntity(String id, Country country) {
+        this.id = id;
         this.country = country;
     }
 
@@ -59,6 +66,15 @@ public class CountryEntity extends AuditEntity implements Identifiable, Serializ
     @Field("active")
     public boolean isActive() {
         return this.isActive;
+    }
+
+
+    public static CountryEntity from(CountryCreatedEvent event) {
+        return new CountryEntity(event.getId(), event.getCountry());
+    }
+
+    public static CountryEntity from(CountryUpdatedEvent event) {
+        return new CountryEntity(event.getId(), event.getCountry());
     }
 
     @Override
