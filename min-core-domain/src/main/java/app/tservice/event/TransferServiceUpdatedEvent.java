@@ -1,4 +1,4 @@
-package app.module.tservice.event;
+package app.tservice.event;
 
 import app.events.AbstractEvent;
 import app.tservice.model.TransferService;

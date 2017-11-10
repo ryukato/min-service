@@ -70,7 +70,7 @@ public class CurrencyEventHandlerTest {
     }
 
     @Test
-    public void testHandleCurrencyUpdatedEvent_no_saved_country() {
+    public void testHandleCurrencyUpdatedEvent_no_saved_currency() {
         String id = UUID.randomUUID().toString();
         Currency updateCurrency = Currency.builder()
                 .withCurrency("KRW")
@@ -105,7 +105,7 @@ public class CurrencyEventHandlerTest {
     }
 
     @Test
-    public void testHandleCurrencyRemovedEvent_no_saved_country() {
+    public void testHandleCurrencyRemovedEvent_no_saved_currency() {
         String id = UUID.randomUUID().toString();
         Currency updateCurrency = Currency.builder()
                 .withCurrency("KRW")

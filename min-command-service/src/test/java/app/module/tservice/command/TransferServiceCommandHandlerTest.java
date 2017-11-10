@@ -1,9 +1,9 @@
 package app.module.tservice.command;
 
 import app.module.tservice.aggregate.TransferServiceAggregate;
-import app.module.tservice.event.TransferServiceCreatedEvent;
-import app.module.tservice.event.TransferServiceRemovedEvent;
-import app.module.tservice.event.TransferServiceUpdatedEvent;
+import app.tservice.event.TransferServiceCreatedEvent;
+import app.tservice.event.TransferServiceRemovedEvent;
+import app.tservice.event.TransferServiceUpdatedEvent;
 import app.tservice.model.TransferService;
 import org.axonframework.messaging.interceptors.BeanValidationInterceptor;
 import org.axonframework.test.aggregate.AggregateTestFixture;

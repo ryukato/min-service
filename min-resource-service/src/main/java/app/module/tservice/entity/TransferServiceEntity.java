@@ -1,6 +1,8 @@
 package app.module.tservice.entity;
 
 import app.entity.AuditEntity;
+import app.tservice.event.TransferServiceCreatedEvent;
+import app.tservice.event.TransferServiceUpdatedEvent;
 import app.tservice.model.TransferService;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,6 +21,11 @@ public class TransferServiceEntity extends AuditEntity implements Identifiable, 
     private boolean isActive;
 
     public TransferServiceEntity(TransferService transferService) {
+        this.transferService = transferService;
+    }
+
+    public TransferServiceEntity(String id, TransferService transferService) {
+        this.id = id;
         this.transferService = transferService;
     }
 
@@ -66,5 +73,13 @@ public class TransferServiceEntity extends AuditEntity implements Identifiable, 
                 ", transferService=" + transferService + super.toString()+
                 ", isActive=" + isActive +
                 '}';
+    }
+
+    public static TransferServiceEntity from(TransferServiceCreatedEvent event) {
+        return new TransferServiceEntity(event.getId(), event.getTransferService());
+    }
+
+    public static TransferServiceEntity from(TransferServiceUpdatedEvent event) {
+        return new TransferServiceEntity(event.getId(), event.getTransferService());
     }
 }
