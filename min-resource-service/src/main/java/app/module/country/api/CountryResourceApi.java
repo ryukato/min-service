@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.concurrent.CompletableFuture;
+
 @Api(value = "Country 조회를 위한 API를 제공한다.")
 @RequestMapping("/api/v1/countries")
 @SuppressWarnings("unused")
@@ -30,7 +32,7 @@ public interface CountryResourceApi {
             @ApiResponse(code = 500, message = "Internal server error occurred", response = ErrorResponse.class) })
 
     @RequestMapping(method = RequestMethod.GET)
-    ResponseEntity<Page<CountryEntity>> findAll(Pageable pageable);
+    CompletableFuture<Page<CountryEntity>> findAll(Pageable pageable);
 
     @ApiOperation(value = "find a country with id", notes = "주어진 id에 해당하는 Country를 조회.", response = CountryEntity.class, produces = "application/json;charset=UTF-8")
     @ApiImplicitParams({
@@ -42,7 +44,7 @@ public interface CountryResourceApi {
             @ApiResponse(code = 404, message = "Not Found", response = ErrorResponse.class),
             @ApiResponse(code = 500, message = "Internal server error occurred", response = ErrorResponse.class) })
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    ResponseEntity<CountryEntity> findById(@PathVariable String id);
+    CompletableFuture<CountryEntity> findById(@PathVariable String id);
 
 
     @ApiOperation(value = "search country with name", notes = "주어진 국가명에 해당하는 국가를 조회", response = CountryEntity.class, produces = "application/json;charset=UTF-8")
@@ -55,7 +57,7 @@ public interface CountryResourceApi {
             @ApiResponse(code = 404, message = "Not Found", response = ErrorResponse.class),
             @ApiResponse(code = 500, message = "Internal server error occurred", response = ErrorResponse.class) })
     @RequestMapping(value = "/search/by-name", method = RequestMethod.GET)
-    ResponseEntity<CountryEntity> findByName(@RequestParam("name") String name);
+    CompletableFuture<CountryEntity> findByName(@RequestParam("name") String name);
 
     @ApiOperation(value = "search all countries being matched part of name", notes = "주어진 국가명에 해당하는 모든 국가를 조회", response = CountryEntity.class, responseContainer = "Page<CountryEntity>", produces = "application/json;charset=UTF-8")
     @ApiImplicitParams({
@@ -70,7 +72,7 @@ public interface CountryResourceApi {
             @ApiResponse(code = 404, message = "Not Found", response = ErrorResponse.class),
             @ApiResponse(code = 500, message = "Internal server error occurred", response = ErrorResponse.class) })
     @RequestMapping(value = "/search/by-name-like", method = RequestMethod.GET)
-    ResponseEntity<Page<CountryEntity>> findByNameLike(@RequestParam("name") String name, Pageable pageable);
+    CompletableFuture<Page<CountryEntity>> findByNameLike(@RequestParam("name") String name, Pageable pageable);
 
 
     @ApiOperation(value = "search country with iso code", notes = "주어진 iso code에 해당하는 국가를 조회", response = CountryEntity.class, produces = "application/json;charset=UTF-8")
@@ -83,5 +85,5 @@ public interface CountryResourceApi {
             @ApiResponse(code = 404, message = "Not Found", response = ErrorResponse.class),
             @ApiResponse(code = 500, message = "Internal server error occurred", response = ErrorResponse.class) })
     @RequestMapping(value = "/search/by-iso", method = RequestMethod.GET)
-    ResponseEntity<CountryEntity> findByIso(@RequestParam("iso") String iso);
+    CompletableFuture<CountryEntity> findByIso(@RequestParam("iso") String iso);
 }

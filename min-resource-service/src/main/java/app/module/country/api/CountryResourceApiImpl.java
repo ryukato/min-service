@@ -1,33 +1,27 @@
 package app.module.country.api;
 
+import app.error.ResourceEntityNotFoundException;
 import app.module.country.entity.CountryEntity;
-import app.country.model.Country;
+import app.module.country.repo.CountryRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @SuppressWarnings("unused")
 @RestController
 public class CountryResourceApiImpl implements CountryResourceApi {
-    Country country = Country
-            .builder()
-            .withName("Korea")
-            .withIsoCode("KR")
-            .withCurrencies(Arrays.asList("KRW"))
-            .build();
-    CountryEntity countryEntity = new CountryEntity(country);
+    private final CountryRepository repository;
 
-    public CountryResourceApiImpl() {
-        countryEntity.setId("59aea4483d4a9e4199780dc3");
-        countryEntity.setActive(true);
+    public CountryResourceApiImpl(CountryRepository repository) {
+        this.repository = repository;
     }
 
     @PostConstruct
@@ -35,27 +29,40 @@ public class CountryResourceApiImpl implements CountryResourceApi {
     }
 
     @Override
-    public ResponseEntity<Page<CountryEntity>> findAll(Pageable pageable) {
-        return ResponseEntity.ok(new PageImpl<>(Collections.singletonList(countryEntity)));
+    public CompletableFuture<Page<CountryEntity>> findAll(Pageable pageable) {
+        return CompletableFuture.supplyAsync(() -> repository.findAll(pageable));
     }
 
     @Override
-    public ResponseEntity<CountryEntity> findById(@PathVariable String id) {
-        return ResponseEntity.ok(countryEntity);
+    public CompletableFuture<CountryEntity> findById(@PathVariable String id) {
+        return CompletableFuture.supplyAsync(() ->
+            Optional.ofNullable(repository.findById(id))
+                    .orElseThrow(() -> new ResourceEntityNotFoundException(id))
+        );
     }
 
     @Override
-    public ResponseEntity<CountryEntity> findByName(@RequestParam("name") String name) {
-        return ResponseEntity.ok(countryEntity);
+    public CompletableFuture<CountryEntity> findByName(@RequestParam("name") String name) {
+        return CompletableFuture.supplyAsync(() ->
+                Optional.ofNullable(repository.findByName(name))
+                        .orElseThrow(() -> new ResourceEntityNotFoundException("No country with name: " + name))
+        );
+    }
+
+    private final Page<CountryEntity> EMPTY_PAGE = new PageImpl<>(Collections.emptyList());
+    @Override
+    public CompletableFuture<Page<CountryEntity>> findByNameLike(@RequestParam("name") String name, Pageable pageable) {
+        return CompletableFuture.supplyAsync(() ->
+                Optional.ofNullable(repository.findByNameLike(name, pageable))
+                        .orElseThrow(() -> new ResourceEntityNotFoundException("No countries with name: " + name))
+        );
     }
 
     @Override
-    public ResponseEntity<Page<CountryEntity>> findByNameLike(@RequestParam("name") String name, Pageable pageable) {
-        return ResponseEntity.ok(new PageImpl<>(Collections.singletonList(countryEntity)));
-    }
-
-    @Override
-    public ResponseEntity<CountryEntity> findByIso(@RequestParam("iso") String iso) {
-        return ResponseEntity.ok(countryEntity);
+    public CompletableFuture<CountryEntity> findByIso(@RequestParam("iso") String iso) {
+        return CompletableFuture.supplyAsync(() ->
+                Optional.ofNullable(repository.findByIso(iso))
+                        .orElseThrow(() -> new ResourceEntityNotFoundException(iso))
+        );
     }
 }
