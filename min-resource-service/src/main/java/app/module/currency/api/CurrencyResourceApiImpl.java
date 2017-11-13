@@ -2,6 +2,7 @@ package app.module.currency.api;
 
 import app.module.currency.entity.CurrencyEntity;
 import app.currency.model.Currency;
+import app.module.currency.repo.CurrencyRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -14,49 +15,34 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @SuppressWarnings("unused")
 @RestController
 public class CurrencyResourceApiImpl implements CurrencyResourceApi {
-    BigDecimal sampleCurrency = new BigDecimal("1.111");
-    Currency currency = Currency.builder()
-            .withBaseDateTime(LocalDateTime.now())
-            .withCurrency("USD")
-            .withCurrencyInKorean("달러")
-            .withBuyInCashCurrency(sampleCurrency)
-            .withBuyInCashSpread(sampleCurrency)
-            .withSellInCashCurrency(sampleCurrency)
-            .withSellInCashSpread(sampleCurrency)
-            .withSellInWireCurrency(sampleCurrency)
-            .withTravelerCheckCurrency(sampleCurrency)
-            .withForeignCheckCurrency(sampleCurrency)
-            .withSellingBaseRate(sampleCurrency)
-            .withCurrencyInDollar(sampleCurrency)
-            .build();
-    CurrencyEntity currencyEntity = new CurrencyEntity(currency);
+    private final CurrencyRepository repository;
 
-    public CurrencyResourceApiImpl() {
-        currencyEntity.setId(UUID.randomUUID().toString());
-        currencyEntity.setActive(true);
+    public CurrencyResourceApiImpl(CurrencyRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public ResponseEntity<Page<CurrencyEntity>> findAll(Pageable pageable) {
-        return ResponseEntity.ok(new PageImpl<>(Collections.singletonList(currencyEntity)));
+    public CompletableFuture<Page<CurrencyEntity>> findAll(Pageable pageable) {
+        return CompletableFuture.supplyAsync(() -> repository.findAll(pageable));
     }
 
     @Override
-    public ResponseEntity<CurrencyEntity> findById(@PathVariable("id") String id) {
-        return ResponseEntity.ok(currencyEntity);
+    public CompletableFuture<CurrencyEntity> findById(@PathVariable("id") String id) {
+        return CompletableFuture.supplyAsync(() -> repository.findById(id));
     }
 
     @Override
-    public ResponseEntity<CurrencyEntity> findByName(@RequestParam("name") String name) {
-        return ResponseEntity.ok(currencyEntity);
+    public CompletableFuture<CurrencyEntity> findByName(@RequestParam("name") String name) {
+        return CompletableFuture.supplyAsync(() -> repository.findByName(name));
     }
 
     @Override
-    public ResponseEntity<CurrencyEntity> findByKoreanName(@RequestParam("name") String name) {
-        return ResponseEntity.ok(currencyEntity);
+    public CompletableFuture<CurrencyEntity> findByKoreanName(@RequestParam("name") String name) {
+        return CompletableFuture.supplyAsync(() -> repository.findByKoreanName(name));
     }
 }

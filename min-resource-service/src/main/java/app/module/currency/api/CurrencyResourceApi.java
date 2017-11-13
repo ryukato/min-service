@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.concurrent.CompletableFuture;
+
 @Api(value = "Currency 조회를 위한 API를 제공한다.")
 @RequestMapping("/api/v1/currencies")
 public interface CurrencyResourceApi {
@@ -27,7 +29,7 @@ public interface CurrencyResourceApi {
             @ApiResponse(code = 404, message = "Not Found", response = ErrorResponse.class),
             @ApiResponse(code = 500, message = "Internal server error occurred", response = ErrorResponse.class) })
     @RequestMapping(method = RequestMethod.GET)
-    ResponseEntity<Page<CurrencyEntity>> findAll(Pageable pageable);
+    CompletableFuture<Page<CurrencyEntity>> findAll(Pageable pageable);
 
     @ApiOperation(value = "find a currency", notes = "주어진 id에 해당하는 환율 정보를 조회", response = CurrencyEntity.class, produces = "application/json;charset=UTF-8")
     @ApiImplicitParams({
@@ -39,7 +41,7 @@ public interface CurrencyResourceApi {
             @ApiResponse(code = 404, message = "Not Found", response = ErrorResponse.class),
             @ApiResponse(code = 500, message = "Internal server error occurred", response = ErrorResponse.class) })
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    ResponseEntity<CurrencyEntity> findById(@PathVariable("id") String id);
+    CompletableFuture<CurrencyEntity> findById(@PathVariable("id") String id);
 
     @ApiOperation(value = "find a currency matched with given name", notes = "주어진 환율명에 해당하는 환율 정보를 조회", response = CurrencyEntity.class, produces = "application/json;charset=UTF-8")
     @ApiImplicitParams({
@@ -51,7 +53,7 @@ public interface CurrencyResourceApi {
             @ApiResponse(code = 404, message = "Not Found", response = ErrorResponse.class),
             @ApiResponse(code = 500, message = "Internal server error occurred", response = ErrorResponse.class) })
     @RequestMapping(value = "/search/by-name", method = RequestMethod.GET)
-    ResponseEntity<CurrencyEntity> findByName(@RequestParam("name") String name);
+    CompletableFuture<CurrencyEntity> findByName(@RequestParam("name") String name);
 
 
     @ApiOperation(value = "find a currency matched with given korean name", notes = "주어진 한글명에 해당하는 환율 정보를 조회", response = CurrencyEntity.class, produces = "application/json;charset=UTF-8")
@@ -64,5 +66,5 @@ public interface CurrencyResourceApi {
             @ApiResponse(code = 404, message = "Not Found", response = ErrorResponse.class),
             @ApiResponse(code = 500, message = "Internal server error occurred", response = ErrorResponse.class) })
     @RequestMapping(value = "/search/by-korean-name", method = RequestMethod.GET)
-    ResponseEntity<CurrencyEntity> findByKoreanName(@RequestParam("name") String name);
+    CompletableFuture<CurrencyEntity> findByKoreanName(@RequestParam("name") String name);
 }
