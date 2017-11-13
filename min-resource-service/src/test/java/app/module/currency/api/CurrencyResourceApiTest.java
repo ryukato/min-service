@@ -30,7 +30,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.asyncDispatch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -52,11 +51,11 @@ public class CurrencyResourceApiTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private CurrencyRepository currencyRepository;
+    private CurrencyRepository repository;
 
     @Before
     public void setUp() {
-        CurrencyResourceApi currencyResourceApi = new CurrencyResourceApiImpl(currencyRepository);
+        CurrencyResourceApi currencyResourceApi = new CurrencyResourceApiImpl(repository);
         this.mockMvc = MockMvcBuilders.standaloneSetup(currencyResourceApi)
                 .setCustomArgumentResolvers(pageableArgumentResolver)
                 .setMessageConverters(httpMessageConverters)
@@ -65,7 +64,7 @@ public class CurrencyResourceApiTest {
 
     @Test
     public void testFindAllCurrencies() throws Exception {
-        given(currencyRepository.findAll(new PageRequest(0, 100))).willReturn(new PageImpl<>(Arrays.asList(buildTestCurrencyEntity())));
+        given(repository.findAll(pageable)).willReturn(new PageImpl<>(Arrays.asList(buildTestCurrencyEntity())));
         MvcResult result = this.mockMvc.perform(get("/api/v1/currencies")
                 .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(MockMvcResultMatchers.request().asyncStarted())
@@ -82,7 +81,7 @@ public class CurrencyResourceApiTest {
     @Test
     public void testFindById() throws Exception {
         String testId = "59aea4483d4a9e4199780dc3";
-        given(currencyRepository.findById(testId)).willReturn(buildTestCurrencyEntity());
+        given(repository.findById(testId)).willReturn(buildTestCurrencyEntity());
         MvcResult result = this.mockMvc.perform(get("/api/v1/currencies/" + testId)
                 .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(MockMvcResultMatchers.request().asyncStarted())
@@ -99,7 +98,7 @@ public class CurrencyResourceApiTest {
     @Test
     public void testFindByName() throws Exception {
         String testName = "Korea";
-        given(currencyRepository.findByName(testName)).willReturn(buildTestCurrencyEntity());
+        given(repository.findByName(testName)).willReturn(buildTestCurrencyEntity());
         MvcResult result = this.mockMvc.perform(get("/api/v1/currencies/search/by-name")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .param("name", testName))
@@ -117,7 +116,7 @@ public class CurrencyResourceApiTest {
     @Test
     public void testFindByKoreanName() throws Exception {
         String testName = "Korea";
-        given(currencyRepository.findByKoreanName(testName)).willReturn(buildTestCurrencyEntity());
+        given(repository.findByKoreanName(testName)).willReturn(buildTestCurrencyEntity());
         MvcResult result = this.mockMvc.perform(get("/api/v1/currencies/search/by-korean-name")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .param("name", testName))

@@ -1,20 +1,15 @@
 package app.module.currency.api;
 
+import app.error.ResourceEntityNotFoundException;
 import app.module.currency.entity.CurrencyEntity;
-import app.currency.model.Currency;
 import app.module.currency.repo.CurrencyRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.UUID;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @SuppressWarnings("unused")
@@ -33,16 +28,25 @@ public class CurrencyResourceApiImpl implements CurrencyResourceApi {
 
     @Override
     public CompletableFuture<CurrencyEntity> findById(@PathVariable("id") String id) {
-        return CompletableFuture.supplyAsync(() -> repository.findById(id));
+        return CompletableFuture.supplyAsync(() ->
+                Optional.ofNullable(repository.findById(id))
+                        .orElseThrow(() -> new ResourceEntityNotFoundException("No currency with id: " + id))
+        );
     }
 
     @Override
     public CompletableFuture<CurrencyEntity> findByName(@RequestParam("name") String name) {
-        return CompletableFuture.supplyAsync(() -> repository.findByName(name));
+        return CompletableFuture.supplyAsync(() ->
+                Optional.ofNullable(repository.findByName(name))
+                        .orElseThrow(() -> new ResourceEntityNotFoundException("No currency with name: " + name))
+        );
     }
 
     @Override
     public CompletableFuture<CurrencyEntity> findByKoreanName(@RequestParam("name") String name) {
-        return CompletableFuture.supplyAsync(() -> repository.findByKoreanName(name));
+        return CompletableFuture.supplyAsync(() ->
+                Optional.ofNullable(repository.findByKoreanName(name))
+                        .orElseThrow(() -> new ResourceEntityNotFoundException("No currency with korean name: " + name))
+        );
     }
 }
