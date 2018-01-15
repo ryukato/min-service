@@ -19,6 +19,9 @@
         <module>min-user-command-service</module>
         <module>min-user-resource-service</module>
         <module>min-auth-service</module>
+        <module>min-partner-common</module>
+        <module>min-partner-command-service</module>
+        <module>min-partner-query-service</module>
     </modules>
 
     <parent>
@@ -35,6 +38,12 @@
         <spring-cloud.version>Dalston.SR3</spring-cloud.version>
         <axonframework-version>3.0.6</axonframework-version>
         <docker.image.prefix>ryukato</docker.image.prefix>
+        <full-artifact-name>target/${project.artifactId}-${project.version}.jar</full-artifact-name>
+        <com.min.version>1.0-SNAPSHOT</com.min.version>
+        <common-version>1.0-SNAPSHOT</common-version>
+        <spring-retry-version>1.2.1.RELEASE</spring-retry-version>
+        <hibernate.em.version>5.2.10.Final</hibernate.em.version>
+        <hibernate.javax.version>1.0.0.Final</hibernate.javax.version>
     </properties>
 
     <dependencies>

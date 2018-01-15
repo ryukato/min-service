@@ -28,4 +28,6 @@ public interface TransferServiceResourceApi {
 
     @RequestMapping(method = RequestMethod.GET)
     ResponseEntity<Page<TransferServiceEntity>> findAll(Pageable pageable);
+
+
 }

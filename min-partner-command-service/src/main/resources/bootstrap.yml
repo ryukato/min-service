@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: min-partner-command-app
+  profiles:
+    active: dev,mongo, local
+
+server:
+  port: ${PORT:9000}
