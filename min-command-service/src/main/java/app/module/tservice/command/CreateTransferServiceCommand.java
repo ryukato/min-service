@@ -7,7 +7,7 @@ public class CreateTransferServiceCommand extends AbstractTransferServiceAttrCom
         super(id, transferService);
     }
 
-    public static Object newCommand(String id, TransferService transferService) {
+    public static CreateTransferServiceCommand newCommand(String id, TransferService transferService) {
         return new CreateTransferServiceCommand(id, transferService);
     }
 }

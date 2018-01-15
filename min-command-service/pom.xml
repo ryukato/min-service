@@ -11,14 +11,6 @@
 
     <artifactId>min-command-service</artifactId>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-        <com.min.version>1.0-SNAPSHOT</com.min.version>
-        <spring-retry-version>1.2.1.RELEASE</spring-retry-version>
-        <full-artifact-name>target/${project.artifactId}-${project.version}.jar</full-artifact-name>
-    </properties>
 
     <dependencies>
         <dependency>
